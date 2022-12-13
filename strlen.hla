@@ -3,6 +3,8 @@
 // Unit 15 Assignment
 // strlen Function
 
+// This function should return in AL the number of characters in the string parameter, passed by its base address.
+
 program Program_15;
 
 #include( "stdlib.hhf" );
@@ -10,7 +12,6 @@ program Program_15;
 static
 	m_String : byte[32];
 	size 	 : uns16 := 31; 
-	//Array_Base_Address : dword := 0; 
 
 procedure strlen(baseStringAddress: dword); @nodisplay; @noframe;
 static
