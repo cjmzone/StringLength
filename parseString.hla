@@ -1,5 +1,6 @@
 // parseString.hla
-// helper procedures
+
+// String I/O routines
 
 procedure gets(baseStringAddress: dword; maxLength : uns16 ); @nodisplay; @noframe;
 static
