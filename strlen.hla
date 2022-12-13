@@ -1,0 +1,80 @@
+// Connor McKenna
+// CS 17
+// Unit 15 Assignment
+// strlen Function
+
+program Program_15;
+
+#include( "stdlib.hhf" );
+#include( "parseString.hla" );
+static
+	m_String : byte[32];
+	size 	 : uns16 := 31; 
+	//Array_Base_Address : dword := 0; 
+
+procedure strlen(baseStringAddress: dword); @nodisplay; @noframe;
+static
+  	ReturnAddress : dword;
+
+begin strlen;
+  
+	pop(ReturnAddress);
+	pop(baseStringAddress);
+
+	push(ReturnAddress);
+
+	push(EBX);
+	push(DX);
+
+	mov(baseStringAddress, EBX);
+	mov(0, DL);
+	mov(0, CH);
+
+	FOR_LOOP_TERMINATE: 
+ 		mov([EBX], AL);   
+  		cmp(DL, AL);      
+  		je END_FOR_LOOP;
+
+	FOR_LOOP_INCREMENT:
+ 		inc(EBX);     
+ 		inc(CH);    
+ 		jmp FOR_LOOP_TERMINATE;
+
+  	END_FOR_LOOP:
+
+	pop(DX);
+	pop(EBX);
+
+	ret();
+
+end strlen;
+
+begin Program_15;
+
+	stdout.put("Feed Me: ");
+	mov(&m_String, EAX);
+
+	push(EAX);  
+	push(size);
+
+	call gets;
+
+	push(EAX);
+	malloc(EAX);
+
+	call strlen;  
+	
+	stdout.put(nl);
+	stdout.put("String you entered: ");
+
+	mov(&m_String, EAX);
+	push(EAX);
+
+	call puts;
+
+	stdout.put(" has length = ");
+	stdout.puti8(CH);
+
+	free(EAX);
+
+end Program_15;

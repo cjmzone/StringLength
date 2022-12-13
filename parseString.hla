@@ -1,0 +1,103 @@
+//parseString.hla
+
+procedure gets(baseStringAddress: dword; maxLength : uns16 ); @nodisplay; @noframe;
+static
+  dReturnAddress : dword;
+
+  wDIRegister  : word  := 0;   // preserve DI
+  wDXRegister  : word  := 0;   // preserve DX
+  dEAXRegister : dword := 0;   // preserve EAX
+  dEBXRegister : dword := 0;   // preserve EBX
+  dECXRegister : dword := 0;   // preserve ECX
+  sData : string;
+
+begin gets;
+
+	mov(EBX, dEBXRegister);
+	mov(EAX, dEAXRegister);
+
+	mov(DX, wDXRegister);
+	mov(DI, wDIRegister);
+
+	pop(dReturnAddress);   // This is the return address 
+	
+	pop(DI);               // This is the max length able to read
+	pop(EBX);      
+        
+	push(dReturnAddress);
+
+	push(wDIRegister);
+	push(wDXRegister);
+	push(dECXRegister);
+	push(dEBXRegister);
+	push(dEAXRegister);
+
+	stdin.flushInput();      
+	stdin.a_gets();  
+       
+	mov(EAX, sData);      
+ 
+	mov(0, DX);        
+	mov(0, ECX);
+
+	getsRepeatLoop:
+		cmp(DI, 0);
+		je getsEndLoop;
+
+		cmp([EAX + ECX],DH);
+		je getsEndLoop;
+
+		mov([EAX + ECX ], DL);   // move character desired
+		mov(DL, (type char [EBX]));   
+		inc(ECX);
+		inc(EBX);
+		dec(DI);
+    		jmp getsRepeatLoop;
+
+  	getsEndLoop:
+  		mov(DH,(type char [EBX]));
+  		strfree(sData);
+
+ 	pop(EAX);
+  	pop(EBX);
+ 	pop(ECX);
+  	pop(DX);
+ 	pop(DI);
+
+  ret();
+end gets;
+
+procedure puts( baseStringAddress: dword ); @nodisplay; @noframe;
+  static
+	dReturnAddress : dword;
+	wDXRegister  : word  := 0;
+	dEBXRegister : dword := 0;
+
+  begin puts;
+
+	mov(EBX, dEBXRegister);
+	mov(DX, wDXRegister);
+	pop(dReturnAddress);
+	pop(EBX);
+	push(dReturnAddress);
+
+	push(dEBXRegister);
+	push(wDXRegister);
+
+	mov(0, DX);           
+	
+	putsRepeatLoop:
+		cmp([EBX], DH);
+		je putsEndLoop;
+		stdout.putc([EBX]);
+		inc(EBX);
+		jmp putsRepeatLoop;
+ 	putsEndLoop:
+
+  	pop(DX);
+  	pop(EBX);
+
+  ret();
+end puts;
+
+
