@@ -1,4 +1,5 @@
-//parseString.hla
+// parseString.hla
+// helper procedures
 
 procedure gets(baseStringAddress: dword; maxLength : uns16 ); @nodisplay; @noframe;
 static
